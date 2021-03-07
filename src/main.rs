@@ -10,29 +10,35 @@ fn to_form(text: &str, arguments: &[&str]) -> String {
     text
 }
 
+
+
+fn load_langpack(lpfile: &str, split: &str) -> HashMap<i32, String> {
+    let key_position = 0;
+    let text_position = 2;
+
+    let lines = fs::read_to_string(lpfile).ok().unwrap();
+    let mut lang_pack: HashMap<i32, String> = HashMap::new();
+
+    for line in lines.split("\n") {
+        let splited:Vec<&str> = line.split(split).collect();
+        let key = splited[key_position].parse();
+        match key {
+            Err(_) => continue,
+            Ok(k) => {
+                let text = splited[text_position];
+                lang_pack.insert(k, text.to_owned());
+            }
+        }
+    }
+    lang_pack
+}
+
 fn main() {
     let filename = "./ko.lp";
     let split_code = ";";
 
     let title_position = 0;
-
-    let key_position = 0;
-    let text_position = 2;
-
-    let lines = fs::read_to_string(filename)
-        .expect(&format!("Failed to read {}", filename));
-
-    let lines = lines.split("\n");
-
-    let mut lang_pack = HashMap::new();
-
-    for line in lines {
-        let splited:Vec<&str> = line.split(split_code).collect();
-        let key:i32 = splited[key_position].parse().ok().unwrap();
-        let text:&str = splited[text_position];
-
-        lang_pack.insert(key, text);
-    }
+    let lang_pack = load_langpack(filename, split_code);
 
     let title_text = lang_pack.get(&title_position).take();
     let mytitle = "My Title";
