@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
-
-fn to_form(text: &str, arguments: &[&str]) -> String {
+#[no_mangle]
+pub fn to_form(text: &str, arguments: &[&str]) -> String {
     let mut text = text.to_owned();
     for i in 0..arguments.len() {
         let s = arguments[i];
@@ -9,10 +9,8 @@ fn to_form(text: &str, arguments: &[&str]) -> String {
     }
     text
 }
-
-
-
-fn load_langpack(lpfile: &str, split: &str) -> HashMap<i32, String> {
+#[no_mangle]
+pub fn load_langpack(lpfile: &str, split: &str) -> HashMap<i32, String> {
     let key_position = 0;
     let text_position = 2;
 
@@ -31,23 +29,4 @@ fn load_langpack(lpfile: &str, split: &str) -> HashMap<i32, String> {
         }
     }
     lang_pack
-}
-
-fn main() {
-    let filename = "./ko.lp";
-    let split_code = ";";
-
-    let title_position = 0;
-    let lang_pack = load_langpack(filename, split_code);
-
-    let title_text = lang_pack.get(&title_position).take();
-    let mytitle = "My Title";
-    let subtitle = "- and my sub title";
-
-    match title_text {
-        None => println!("Failed to load text this one"),
-        Some(t) => {
-            println!("{}",to_form(t, &[mytitle, subtitle]));
-        } 
-    }
 }
