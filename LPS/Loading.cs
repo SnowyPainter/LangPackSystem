@@ -37,13 +37,12 @@ namespace LPS
         /// <param name="splitCode">file's spliting code</param>
         /// <param name="overwrite">overlapped key exists, then overwrite that one</param>
         /// <returns>Return Language Packed that indexed with Key</returns>
-        public static Dictionary<int, string> Load(string lpFile, string splitCode, bool overwrite = false)
+        public static Dictionary<int, string> Load(List<string> lpLines, string splitCode, bool overwrite = false)
         {
+            if (lpLines == null) return null;
             Dictionary<int, string> langpack = new Dictionary<int, string>();
-            var lines = readStringsFromFile(lpFile);
-            if (lines == null) return null;
-            
-            foreach(var line in lines)
+
+            foreach(var line in lpLines)
             {
                 if (line == null) continue;
                 var splitedByCode = line.Split(splitCode);
