@@ -45,10 +45,10 @@ namespace LPS
             
             foreach(var line in lines)
             {
-                if (line == null) return null;
+                if (line == null) continue;
                 var splitedByCode = line.Split(splitCode);
                 int key;
-                if (!int.TryParse(splitedByCode[KeyPosition], out key)) return null;
+                if (!int.TryParse(splitedByCode[KeyPosition], out key)) continue;
 
                 string text = splitedByCode[TextPosition];
 
